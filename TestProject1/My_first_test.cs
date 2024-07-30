@@ -9,11 +9,11 @@ using Ozon.Tpl.RfbsProviderTemplate.Admin.Grpc;
 
 namespace TestProject1;
 
-public class UnitTest1
+public class My_first_test
 {
     private readonly ITestOutputHelper output;
 
-    public UnitTest1(ITestOutputHelper output)
+    public My_first_test(ITestOutputHelper output)
     {
         this.output = output;
     }
