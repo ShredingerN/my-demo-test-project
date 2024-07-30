@@ -43,11 +43,12 @@ public class My_first_test
         using (new AssertionScope())
         {
             res1.BaseRoutes.Should().HaveCount(res2.BaseRoutes.Count);
-            res1.BaseRoutes.OrderBy(x => x.RegionToUid).Should().Equal(res2.BaseRoutes.OrderBy(x => x.RegionToUid));
-            res1.BaseRoutes.OrderBy(x => x.RegionToUid).Should()
+            res1.BaseRoutes.OrderBy(
+                x => x.RegionToUid).Should().Equal(res2.BaseRoutes.OrderBy(x => x.RegionToUid));
+            res1.BaseRoutes.OrderBy(
+                    x => x.RegionToUid).Should()
                 .BeEquivalentTo(res2.BaseRoutes.OrderBy(x => x.RegionToUid));
         }
-
         output.WriteLine($"TPLRFBS-3297: {res1}\nМастер :{res2}");
     }
 
@@ -98,6 +99,7 @@ public class My_first_test
         };
         var res1 = client1.GetConstantBaseRouteDurations(request);
         var res2 = client2.GetConstantBaseRouteDurations(request);
+        
         using (new AssertionScope())
         {
             res2.DurationBaseRoutes.Should().Contain(x => x.ConstantDurationMax == 5);
@@ -117,6 +119,7 @@ public class My_first_test
         };
         var res1 = client1.GetProviderTemplateById(request);
         var res2 = client2.GetProviderTemplateById(request);
+        
         res1.Should().BeEquivalentTo(res2);
         output.WriteLine($"TPLRFBS-5409: {res1}\nМастер :{res2}");
     }
@@ -152,7 +155,6 @@ public class My_first_test
     public async Task ChangeBaseRouteActivityByProviderTemplateId_ShouldBeSameBothResponses()
     {
         var (client1, client2) = await OpenServiceChannelAdmin();
-
         var res1 = client1.ChangeBaseRouteActivityByProviderTemplateId(
             new ChangeBaseRouteActivityByProviderTemplateIdRequest()
             {
@@ -176,14 +178,12 @@ public class My_first_test
         res1.Should().BeEquivalentTo(res2);
         output.WriteLine($"TPLRFBS-5409: {res1}\nМастер :{res2}");
     }
-
-
+    
     [Fact] 
     // Отрефакторить тест как-то, кривой...
     public async Task UpdateRouteDurationManual_ShouldBeSameBothResponses()
     {
         var (client1, client2) = await OpenServiceChannelAdmin();
-
         var res1 = client1.UpdateRouteDurationManual(new UpdateRouteDurationManualRequest
         {
             RegionFromUid = "c71b4655-4ec9-5563-afe3-884294efa592",
@@ -203,7 +203,6 @@ public class My_first_test
         res1.Should().BeEquivalentTo(res2);
         output.WriteLine($"TPLRFBS-5409: {res1}\nМастер :{res2}");
     }
-
 
     [Fact] 
     public async Task GetBaseRoute_ShouldBeSameBothResponses()
