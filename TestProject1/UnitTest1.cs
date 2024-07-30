@@ -96,8 +96,11 @@ public class UnitTest1
         output.WriteLine($"TPLRFBS-3297: {res1}\nМастер :{res2}");
     }
 
-    [Fact] 
-    public async Task GetConstantBaseRouteDurations_DurationMaxFromSettings()
+    [Theory] 
+    [InlineData(16,4,4, "0033ed84-6be1-438d-8890-be3087e11b58",
+        "b73b7c50-112e-4b04-82df-1e0cea13de4b",true)]
+    public async Task GetConstantBaseRouteDurations_DurationMaxFromSettings
+        (int providerId, int durMax, int durMin, string fromUid, string toUid, bool isInternal)
     {
         var (client1, client2) = await OpenServiceChannel();
         var res1 = client1.GetConstantBaseRouteDurations(new GetConstantBaseRouteDurationsRequest()
@@ -106,12 +109,12 @@ public class UnitTest1
             {
                 new GetConstantBaseRouteDurationsRequest.Types.ConstantBaseRouteDurationRequest()
                 {
-                    ProviderId = 16,
-                    DurationMax = 4,
-                    DurationMin = 4,
-                    FromUid = "0033ed84-6be1-438d-8890-be3087e11b58",
-                    ToUid = "b73b7c50-112e-4b04-82df-1e0cea13de4b",
-                    IsInternalRoute = true
+                    ProviderId = providerId,
+                    DurationMax = durMax,
+                    DurationMin = durMin,
+                    FromUid = fromUid,
+                    ToUid = toUid,
+                    IsInternalRoute = isInternal
                 }
             }
         });
@@ -121,12 +124,12 @@ public class UnitTest1
             {
                 new GetConstantBaseRouteDurationsRequest.Types.ConstantBaseRouteDurationRequest()
                 {
-                    ProviderId = 16,
-                    DurationMax = 4,
-                    DurationMin = 4,
-                    FromUid = "0033ed84-6be1-438d-8890-be3087e11b58",
-                    ToUid = "b73b7c50-112e-4b04-82df-1e0cea13de4b",
-                    IsInternalRoute = true
+                    ProviderId = providerId,
+                    DurationMax = durMax,
+                    DurationMin = durMin,
+                    FromUid = fromUid,
+                    ToUid = toUid,
+                    IsInternalRoute = isInternal
                 }
             }
         });
