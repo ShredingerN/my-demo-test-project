@@ -7,7 +7,7 @@ using Ozon.Tpl.RfbsProviderTemplate.Grpc;
 using Ozon.Tpl.RfbsProviderTemplate.Admin.Grpc;
 
 
-namespace TestProject1;
+namespace TestProject_Demo;
 
 public class My_first_test
 {
@@ -22,39 +22,23 @@ public class My_first_test
     public async Task Test1()
     {
         var (client1, client2) = await OpenServiceChannel();
-        var res1 = client1.GetBaseRoutesWithConstantDurationsByStartPoint(
-            new GetBaseRoutesWithConstantDurationsByStartPointRequest()
-            {
-                // ProviderId = 51,
-                // ProviderTemplateId = 124,
-                // RegionFromUid = "061b16ee-90a7-51bf-8af6-491737c8fd62"
-                ProviderId = 16,
-                ProviderTemplateId = 110,
-                RegionFromUid = "0033ed84-6be1-438d-8890-be3087e11b58"
-
-                // ProviderId = 18,
-                // ProviderTemplateId = 1,
-                // RegionFromUid = "b38157c8-433d-41ba-a89b-a67b7cdd2a87"
-            });
-
-
-        var res2 = client2.GetBaseRoutesWithConstantDurationsByStartPoint(
-            new GetBaseRoutesWithConstantDurationsByStartPointRequest()
-            {
-                // ProviderId = 51,
-                // ProviderTemplateId = 124,
-                // RegionFromUid = "061b16ee-90a7-51bf-8af6-491737c8fd62"
-                ProviderId = 16,
-                ProviderTemplateId = 110,
-                RegionFromUid = "0033ed84-6be1-438d-8890-be3087e11b58"
-                //
-                // ProviderId = 18,
-                // ProviderTemplateId = 1,
-                // RegionFromUid = "b38157c8-433d-41ba-a89b-a67b7cdd2a87"
-                // ProviderId = 18,
-                // ProviderTemplateId = 22,
-                // RegionFromUid = "140e31da-27bf-4519-9ea0-6185d681d44e"
-            });
+        var request = new GetBaseRoutesWithConstantDurationsByStartPointRequest()
+        {
+            // ProviderId = 51,
+            // ProviderTemplateId = 124,
+            // RegionFromUid = "061b16ee-90a7-51bf-8af6-491737c8fd62"
+            ProviderId = 16,
+            ProviderTemplateId = 110,
+            RegionFromUid = "0033ed84-6be1-438d-8890-be3087e11b58"
+            // ProviderId = 18,
+            // ProviderTemplateId = 22,
+            // RegionFromUid = "140e31da-27bf-4519-9ea0-6185d681d44e"
+            // ProviderId = 18,
+            // ProviderTemplateId = 1,
+            // RegionFromUid = "b38157c8-433d-41ba-a89b-a67b7cdd2a87"
+        };
+        var res1 = client1.GetBaseRoutesWithConstantDurationsByStartPoint(request);
+        var res2 = client2.GetBaseRoutesWithConstantDurationsByStartPoint(request);
 
         using (new AssertionScope())
         {
@@ -71,20 +55,15 @@ public class My_first_test
     public async Task GetBaseRoutesWithConstantDurationsByStartPoint_DurationMaxFromSettings()
     {
         var (client1, client2) = await OpenServiceChannel();
-        var res1 = client1.GetBaseRoutesWithConstantDurationsByStartPoint(
+        var request= new GetBaseRoutesWithConstantDurationsByStartPointRequest(
             new GetBaseRoutesWithConstantDurationsByStartPointRequest()
             {
                 ProviderId = 16,
                 ProviderTemplateId = 110,
                 RegionFromUid = "0033ed84-6be1-438d-8890-be3087e11b58"
             });
-        var res2 = client2.GetBaseRoutesWithConstantDurationsByStartPoint(
-            new GetBaseRoutesWithConstantDurationsByStartPointRequest()
-            {
-                ProviderId = 16,
-                ProviderTemplateId = 110,
-                RegionFromUid = "0033ed84-6be1-438d-8890-be3087e11b58"
-            });
+        var res1 = client1.GetBaseRoutesWithConstantDurationsByStartPoint(request);
+        var res2 = client2.GetBaseRoutesWithConstantDurationsByStartPoint(request);
 
         using (new AssertionScope())
         {
@@ -102,7 +81,7 @@ public class My_first_test
         (int providerId, int durMax, int durMin, string fromUid, string toUid, bool isInternal)
     {
         var (client1, client2) = await OpenServiceChannel();
-        var res1 = client1.GetConstantBaseRouteDurations(new GetConstantBaseRouteDurationsRequest()
+        var request = new GetConstantBaseRouteDurationsRequest()
         {
             DurationBaseRoutes =
             {
@@ -116,22 +95,9 @@ public class My_first_test
                     IsInternalRoute = isInternal
                 }
             }
-        });
-        var res2 = client2.GetConstantBaseRouteDurations(new GetConstantBaseRouteDurationsRequest()
-        {
-            DurationBaseRoutes =
-            {
-                new GetConstantBaseRouteDurationsRequest.Types.ConstantBaseRouteDurationRequest()
-                {
-                    ProviderId = providerId,
-                    DurationMax = durMax,
-                    DurationMin = durMin,
-                    FromUid = fromUid,
-                    ToUid = toUid,
-                    IsInternalRoute = isInternal
-                }
-            }
-        });
+        };
+        var res1 = client1.GetConstantBaseRouteDurations(request);
+        var res2 = client2.GetConstantBaseRouteDurations(request);
         using (new AssertionScope())
         {
             res2.DurationBaseRoutes.Should().Contain(x => x.ConstantDurationMax == 5);
@@ -145,19 +111,18 @@ public class My_first_test
     public async Task Test_for_me_5409()
     {
         var (client1, client2) = await OpenServiceChannel();
-        var res1 = client1.GetProviderTemplateById(new GetProviderTemplateByIdRequest()
+        var request = new GetProviderTemplateByIdRequest()
         {
             Id = 100
-        });
-        var res2 = client2.GetProviderTemplateById(new GetProviderTemplateByIdRequest()
-        {
-            Id = 100
-        });
+        };
+        var res1 = client1.GetProviderTemplateById(request);
+        var res2 = client2.GetProviderTemplateById(request);
         res1.Should().BeEquivalentTo(res2);
         output.WriteLine($"TPLRFBS-5409: {res1}\nМастер :{res2}");
     }
 
     [Fact] 
+    // Отрефакторить тест как-то, кривой...
     public async Task ChangeBaseRouteActivity_ShouldBeSameBothResponses()
     {
         var (client1, client2) = await OpenServiceChannelAdmin();
@@ -183,6 +148,7 @@ public class My_first_test
     }
 
     [Fact] 
+    // Отрефакторить тест как-то, кривой...
     public async Task ChangeBaseRouteActivityByProviderTemplateId_ShouldBeSameBothResponses()
     {
         var (client1, client2) = await OpenServiceChannelAdmin();
@@ -213,6 +179,7 @@ public class My_first_test
 
 
     [Fact] 
+    // Отрефакторить тест как-то, кривой...
     public async Task UpdateRouteDurationManual_ShouldBeSameBothResponses()
     {
         var (client1, client2) = await OpenServiceChannelAdmin();
@@ -242,7 +209,7 @@ public class My_first_test
     public async Task GetBaseRoute_ShouldBeSameBothResponses()
     {
         var (client1, client2) = await OpenServiceChannelAdmin();
-        var res1 = client1.GetBaseRoute(new GetBaseRouteRequest
+        var request = new GetBaseRouteRequest
         {
             ProviderId = 132,
             RegionFromUid = "c71b4655-4ec9-5563-afe3-884294efa592",
@@ -250,17 +217,9 @@ public class My_first_test
             ServiceCode = "ACIPOUD",
             CountryFromUid = "c71b4655-4ec9-5563-afe3-884294efa592",
             CountryToUid = "42fb1c32-0cfe-5c96-9fb5-7f8e8449f28c"
-        });
-
-        var res2 = client2.GetBaseRoute(new GetBaseRouteRequest
-        {
-            ProviderId = 132,
-            RegionFromUid = "c71b4655-4ec9-5563-afe3-884294efa592",
-            RegionToUid = "026bc56f-3731-48e9-8245-655331f596c0",
-            ServiceCode = "ACIPOUD",
-            CountryFromUid = "c71b4655-4ec9-5563-afe3-884294efa592",
-            CountryToUid = "42fb1c32-0cfe-5c96-9fb5-7f8e8449f28c"
-        });
+        };
+        var res1 = client1.GetBaseRoute(request);
+        var res2 = client2.GetBaseRoute(request);
 
         res1.Should().BeEquivalentTo(res2);
         output.WriteLine($"TPLRFBS-5409: {res1}\nМастер :{res2}");
@@ -414,8 +373,7 @@ public class My_first_test
 
         return (client1, client2);
     }
-
-
+    
     private async Task<(RfbsProviderTemplateAdminApi.RfbsProviderTemplateAdminApiClient,
         RfbsProviderTemplateAdminApi.RfbsProviderTemplateAdminApiClient)> OpenServiceChannelAdmin()
     {
