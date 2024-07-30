@@ -18,7 +18,7 @@ public class UnitTest1
         this.output = output;
     }
 
-    [Fact] 
+    [Fact]
     public async Task Test1()
     {
         var (client1, client2) = await OpenServiceChannel();
@@ -51,7 +51,6 @@ public class UnitTest1
                 // ProviderId = 18,
                 // ProviderTemplateId = 1,
                 // RegionFromUid = "b38157c8-433d-41ba-a89b-a67b7cdd2a87"
-                //
                 // ProviderId = 18,
                 // ProviderTemplateId = 22,
                 // RegionFromUid = "140e31da-27bf-4519-9ea0-6185d681d44e"
